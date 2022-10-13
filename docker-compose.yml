@@ -1,0 +1,10 @@
+version: "3"
+services:
+  aibbey-road-uplink:
+    # if something fails or the server is restarted, the container will restart
+    restart: always
+    container_name: aibbey-road-uplink
+    image: aibbey-road-uplink
+    build:
+      # build the iris clasifier image from the Dockerfile in the current directory
+      context: .
