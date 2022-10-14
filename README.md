@@ -10,8 +10,8 @@ Generate music with artificial intelligence.
 - Python 3.7 (Does not work on Python 3.10)
 
 ### With Docker
-
-    $ sudo docker compose run
+    $ sudo docker compose build
+    $ sudo docker compose up -d
     
 ### Standalone
 
