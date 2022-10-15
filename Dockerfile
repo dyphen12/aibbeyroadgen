@@ -18,4 +18,4 @@ ENV PYTHONUNBUFFERED=1
 
 COPY . . 
 
-CMD [ "python", "./anvilapp.py" ]
+CMD [ "python", "./application.py" ]
