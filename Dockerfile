@@ -1,6 +1,6 @@
 FROM python:3.7.15-bullseye
 
-ADD anvilapp.py /
+ADD application.py /
 
 COPY requirements.txt ./
 

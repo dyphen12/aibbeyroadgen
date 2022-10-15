@@ -1,3 +1,6 @@
 magenta~=2.1.4
 anvil-uplink
 midi2audio
+requests
+gunicorn
+flask
