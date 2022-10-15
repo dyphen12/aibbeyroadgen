@@ -31,7 +31,7 @@ Generate music with artificial intelligence.
 
 ### Docker:
 
-    sudo docker compose up -d
+    $ sudo docker compose up -d
 
   
 ### Flask API:
