@@ -1,3 +1,11 @@
+"""
+anvilapp.py
+
+This module contains the Anvil App API for the Aibbey Road project front-end.
+Notes: Deprecating this module in favour of application.py
+
+"""
+
 from aibbeyroad import core
 from midi2audio import FluidSynth
 import anvil.server

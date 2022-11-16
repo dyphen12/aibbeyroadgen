@@ -1,5 +1,4 @@
 """
-
 core.py
 
 This module contains the core functions for the Aibbey Road project.
@@ -161,11 +160,6 @@ def generate_midi_for_web(seed, bars):
     # Ask the model to continue the sequence.
 
     sequence = melody_rnn.generate(input_sequence, generator_options)
-
-    # print(sample_seq.notes)
-    # twinkle_twinkle = music_pb2.NoteSequence()
-    # Add the notes to the sequence.
-    # twinkle_twinkle.notes.add(pitch=60, start_time=0.0, end_time=0.5, velocity=80)
 
     for i in range(len(sample_seq.notes)):
         try:

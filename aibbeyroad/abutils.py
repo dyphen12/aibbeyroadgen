@@ -1,5 +1,4 @@
 """
-
 abutils.py
 
 This module contains a number of utility functions for use with the Aibbey Road project.
@@ -14,6 +13,9 @@ import json
 
 
 class awsconfig:
+    """
+    This class contains the configuration for the AWS S3 bucket and folder.
+    """
     def __init__(self, bucket, folder, bars):
         self.bucket = bucket
         self.folder = folder
@@ -21,12 +23,16 @@ class awsconfig:
 
 
 def load_config():
+    """
+    Load the config file config.json
+    :return: awsconfig object
+    """
     config_loc = 'awsconfig.json'
     try:
         with open(config_loc) as jsonFile:
             jsonObject = json.load(jsonFile)
             jsonFile.close()
-            print(jsonObject)
+            #print(jsonObject)
 
             awsc = awsconfig(jsonObject['bucket'], jsonObject['folder'], jsonObject['bars'])
 
@@ -61,7 +67,7 @@ def upload_file(file_name, object_name=None):
 
     s3folder = s3config.folder + '/{}'
 
-    print(s3folder)
+    #print(s3folder)
 
 
     try:
@@ -75,6 +81,10 @@ def upload_file(file_name, object_name=None):
 
 
 def get_buckets():
+    """
+    Get a list of buckets
+    :return: None
+    """
     # Let's use Amazon S3
     s3 = boto3.resource("s3")
 

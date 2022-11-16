@@ -44,7 +44,6 @@ Generate music with artificial intelligence.
 
     $ python anvilapp.py 
 
- 
 
 ### As Package:
   
@@ -57,7 +56,14 @@ Generate music with artificial intelligence.
 
 ### Flask API:  Upload MIDI with CURL
 
-    $ curl -X POST -F file=@"TearsInHeaven.mid" http://localhost:5000/upload-midi --output TearsInHeaven-generated.mid
+#### Direct Download
+
+    $ curl -X POST -F file=@"your_seed_name_here.mid" http://localhost:5000/upload-midi --output your_generated_midi_name_here.mid
+
+#### AWS S3 Bucket
+
+    $ curl -X POST -F file=@"your_seed_name_here.mid" http://localhost:5000/process-midi
+
 
 
 ## Anvil Front-end  
@@ -66,16 +72,37 @@ To route to your Anvil Web App just change the API code on **anvilapp.py**
   
 Example: **anvilapp.py**  
   
- from aibbeyroad import core    from midi2audio import FluidSynth    
-    import anvil.server    
-    import anvil.media    
-    import random    
-    import io  
+
+     from aibbeyroad import core    from midi2audio import FluidSynth    
+     import anvil.server    
+     import anvil.media    
+     import random    
+     import io  
+      
+     anvil.server.connect("your-key-here")  
+
+### AWS Endpoint
+
+#### Download AWS CLI and configure your user
+
+Set up the AWS command-line tool because it makes authentication so much easier.
+
+Open the terminal, then, type `aws configure`
   
- anvil.server.connect("your-key-here")  
-  
+Insert your AWS Key ID and Secret Access Key, along with the region you created your bucket in (use the CSV file). You can find the region name of your bucket on the S3 page of the console.
+
+Now you can upload your files directly to the s3 bucket.
+
 ## Docs  
-  
+
+### API Endpoints
+
+| HTTP Request |  Address      | Query Params | Response       | Description                                                                                |
+|--------------|---------------|--------------|----------------|--------------------------------------------------------------------------------------------|
+|     POST     | /process-midi | seed.mid     | Uploaded to S3 | Uploads .mid file to process and uploads a "generated midi" to folder in a S3 Bucket                      |
+|     POST     | /upload-midi  | seed.mid     | generated.mid  | File Attachment, Uploads .mid file to process and returns the generated midi to download |
+|              |               |              |                |                                                                                            |
+
 ### aibbeyroad.core  
   
  *Function* **generate_midi(_filename_):**   

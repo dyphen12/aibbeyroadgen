@@ -1,5 +1,4 @@
 """
-
 application.py
 
 This module contains the API for the Aibbey Road project.
@@ -19,16 +18,24 @@ UPLOAD_FOLDER = '/seeds'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-#curl -X POST -F file=@"TearsInHeaven.mid" http://localhost:5000/upload-midi
-
-#curl -X POST -F file=@"TearsInHeaven.mid" http://localhost:5000/upload-midi --output TearsInHeaven-generated.mid
 
 @app.route("/")
 def hello_world():
+    """
+    This function is the default route for the API.
+    :return: string
+
+    Notes: Deprecating this function
+    """
     return "Hello World"
 
 @app.route("/upload-midi", methods=['POST','PUT'])
-def print_filename():
+def process_midi():
+    """
+    This function processes the midi file and returns the generated midi file.
+    :return: file
+    """
+
     file = request.files['file']
     filename=secure_filename(file.filename)
 
@@ -38,7 +45,7 @@ def print_filename():
 
     file.save(filedir)
 
-    print(filename)
+    #print(filename)
 
     core.generate_midi_for_web(filedir,4)
 
@@ -49,12 +56,15 @@ def print_filename():
 
 
 
-#curl -X POST -F file=@"TearsInHeaven.mid" http://localhost:5000/process-midi
-#curl -X POST -F file=@"I-want-to-hold-your-hand.MID" http://localhost:5000/process-midi
-#curl -X POST -F file=@"FinalFantasyIVBattleTheme.mid" http://localhost:5000/process-midi
-#curl -X POST -F file=@"FinalFantasyIVBattleTheme.mid" http://localhost:5000/process-midi
+
+
 @app.route("/process-midi", methods=['POST','PUT'])
 def process_midi_s3():
+    """
+    This function processes the midi file and uploads the generated file to an AWS S3 bucket.
+    :return: string
+    """
+
     file = request.files['file']
     filename=secure_filename(file.filename)
 
@@ -64,7 +74,7 @@ def process_midi_s3():
 
     file.save(filedir)
 
-    print(filename)
+    #print(filename)
 
     core.generate_midi_for_web(filedir,4)
 
@@ -75,10 +85,10 @@ def process_midi_s3():
     response = abutils.upload_file(gname, gbucketname)
 
     if response:
-        print('Uploaded to S3')
+        #print('Uploaded to S3')
         return 'Uploaded to S3'
     else:
-        print('Upload failed')
+        #print('Upload failed')
         return 'Upload failed'
 
 
