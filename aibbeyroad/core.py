@@ -1,3 +1,12 @@
+"""
+
+core.py
+
+This module contains the core functions for the Aibbey Road project.
+
+"""
+
+
 import ctypes.util
 orig_ctypes_util_find_library = ctypes.util.find_library
 def proxy_find_library(lib):

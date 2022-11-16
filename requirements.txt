@@ -4,3 +4,4 @@ midi2audio
 requests
 gunicorn
 flask
+boto3

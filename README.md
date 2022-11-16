@@ -14,7 +14,7 @@ Generate music with artificial intelligence.
   
 ### Docker  (Flask API):
 
-     $ sudo docker compose build $
+     $ sudo docker compose build 
      $ sudo docker compose up -d
 
   
