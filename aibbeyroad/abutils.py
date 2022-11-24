@@ -16,11 +16,39 @@ class awsconfig:
     """
     This class contains the configuration for the AWS S3 bucket and folder.
     """
-    def __init__(self, bucket, folder, bars):
+    def __init__(self, bucket, folder, bars, seeds_folder):
         self.bucket = bucket
         self.folder = folder
         self.bars = bars
+        self.seeds_folder = seeds_folder
+        self.access_key = os.environ['AWS_ACCESS_KEY_ID']
+        self.secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
+        self.region = os.environ['AWS_DEFAULT_REGION']
 
+
+def aws_client():
+    awsconfig = load_config()
+    s3_client = boto3.client('s3',
+                             aws_access_key_id=awsconfig.access_key,
+                             aws_secret_access_key=awsconfig.secret_key,
+                             region_name=awsconfig.region
+                             )
+    return s3_client
+
+def aws_login():
+    """
+    Login to AWS
+    :return: None
+    """
+    # Load the AWS credentials from the config file
+    awsconfig = load_config()
+    session = boto3.Session(
+        aws_access_key_id=awsconfig.access_key,
+        aws_secret_access_key=awsconfig.secret_key,
+    )
+
+    s3 = session.resource('s3')
+    return s3
 
 def load_config():
     """
@@ -34,7 +62,7 @@ def load_config():
             jsonFile.close()
             #print(jsonObject)
 
-            awsc = awsconfig(jsonObject['bucket'], jsonObject['folder'], jsonObject['bars'])
+            awsc = awsconfig(jsonObject['bucket'], jsonObject['s3-folder'], jsonObject['bars'], jsonObject['upload-folder'])
 
         return awsc
 
@@ -61,7 +89,7 @@ def upload_file(file_name, object_name=None):
 
 
     # Upload the file
-    s3_client = boto3.client('s3')
+    s3_client = aws_client()
 
     s3config = load_config()
 
@@ -86,7 +114,7 @@ def get_buckets():
     :return: None
     """
     # Let's use Amazon S3
-    s3 = boto3.resource("s3")
+    s3 = aws_login()
 
     # Print out bucket names
     for bucket in s3.buckets.all():

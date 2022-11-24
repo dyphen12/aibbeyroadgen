@@ -14,7 +14,7 @@ from aibbeyroad import core, abutils
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/seeds'
+UPLOAD_FOLDER = '/' + abutils.load_config().seeds_folder
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -41,7 +41,7 @@ def process_midi():
 
     preprocessname = 'preprocess-' + str(random.randint(1000, 9999)) + '-' + secure_filename(file.filename)
 
-    filedir = 'seeds/' + preprocessname
+    filedir = abutils.load_config().seeds_folder + '/' + preprocessname
 
     file.save(filedir)
 
@@ -50,15 +50,13 @@ def process_midi():
     core.generate_midi_for_web(filedir,4)
 
     gname = filedir.replace('preprocess', 'generated')
-    gname = gname.replace('seeds', 'generated')
+    gname = gname.replace(abutils.load_config().seeds_folder, 'generated')
 
     return send_file(gname)
 
 
 
-
-
-@app.route("/process-midi", methods=['POST','PUT'])
+@app.route("/upload-midi-s3", methods=['POST','PUT'])
 def process_midi_s3():
     """
     This function processes the midi file and uploads the generated file to an AWS S3 bucket.
@@ -70,17 +68,19 @@ def process_midi_s3():
 
     preprocessname = 'preprocess-' + str(random.randint(10000, 99999)) + '-' + secure_filename(file.filename)
 
-    filedir = 'seeds/' + preprocessname
+    filedir = abutils.load_config().seeds_folder + '/' + preprocessname
 
     file.save(filedir)
 
     #print(filename)
 
-    core.generate_midi_for_web(filedir,4)
+    core.generate_midi_for_aws(filedir,4,abutils.load_config().seeds_folder)
 
     gname = filedir.replace('preprocess', 'generated')
-    gname = gname.replace('seeds', 'generated')
+    gname = gname = gname.replace(abutils.load_config().seeds_folder, 'generated')
     gbucketname = preprocessname.replace('preprocess', 'generated')
+
+    print('Generated MIDI: ' + gname.replace('generated/', abutils.load_config().bucket + '/' + abutils.load_config().folder + "/"))
 
     response = abutils.upload_file(gname, gbucketname)
 

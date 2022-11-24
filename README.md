@@ -10,12 +10,11 @@ Generate music with artificial intelligence.
 - Ubuntu 18.06 or Higher  
 - Python 3.7 (Does not work on Python 3.10)  
 
-## Build & Run
+## Build
   
 ### Docker  (Flask API):
 
-     $ sudo docker compose build 
-     $ sudo docker compose up -d
+     $ sudo docker build -t ${app} . 
 
   
 ### Virtual Environment:
@@ -31,8 +30,13 @@ Generate music with artificial intelligence.
 
 ### Docker:
 
-    $ sudo docker compose up -d
+In order to upload to an AWS S3 Bucket, you need to add the following **environment variables** in **your docker run command**.
 
+Example:
+
+    $ docker run [container] -e AWS_ACCESS_KEY_ID=your-access-key \
+    $ -e AWS_SECRET_ACCESS_KEY=your-secret-access-key \
+    $ -e AWS_DEFAULT_REGION=your-default-region 
   
 ### Flask API:
 
@@ -62,7 +66,7 @@ Generate music with artificial intelligence.
 
 #### AWS S3 Bucket
 
-    $ curl -X POST -F file=@"your_seed_name_here.mid" http://localhost:5000/process-midi
+    $ curl -X POST -F file=@"your_seed_name_here.mid" http://localhost:5000/upload-midi-s3
 
 
 
@@ -81,27 +85,16 @@ Example: **anvilapp.py**
       
      anvil.server.connect("your-key-here")  
 
-### AWS Endpoint
-
-#### Download AWS CLI and configure your user
-
-Set up the AWS command-line tool because it makes authentication so much easier.
-
-Open the terminal, then, type `aws configure`
-  
-Insert your AWS Key ID and Secret Access Key, along with the region you created your bucket in (use the CSV file). You can find the region name of your bucket on the S3 page of the console.
-
-Now you can upload your files directly to the s3 bucket.
 
 ## Docs  
 
 ### API Endpoints
 
-| HTTP Request |  Address      | Query Params | Response       | Description                                                                                |
-|--------------|---------------|--------------|----------------|--------------------------------------------------------------------------------------------|
-|     POST     | /process-midi | seed.mid     | Uploaded to S3 | Uploads .mid file to process and uploads a "generated midi" to folder in a S3 Bucket                      |
-|     POST     | /upload-midi  | seed.mid     | generated.mid  | File Attachment, Uploads .mid file to process and returns the generated midi to download |
-|              |               |              |                |                                                                                            |
+| HTTP Request | Address         | Query Params | Response       | Description                                                                                |
+|--------------|-----------------|--------------|----------------|--------------------------------------------------------------------------------------------|
+|     POST     | /upload-midi-s3 | seed.mid     | Uploaded to S3 | Uploads .mid file to process and uploads a "generated midi" to folder in a S3 Bucket                      |
+|     POST     | /upload-midi    | seed.mid     | generated.mid  | File Attachment, Uploads .mid file to process and returns the generated midi to download |
+|              |                 |              |                |                                                                                            |
 
 ### aibbeyroad.core  
   

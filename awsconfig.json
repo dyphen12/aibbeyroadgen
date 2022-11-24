@@ -1,5 +1,6 @@
 {
   "bucket": "aibbeybucket",
-  "folder": "midi_out",
+  "s3-folder": "midi_out",
+  "upload-folder": "midi_in",
   "bars": 4
 }
